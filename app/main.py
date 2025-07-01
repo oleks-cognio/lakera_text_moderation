@@ -64,8 +64,10 @@ async def healthz():
 async def log_request_timestamp(request: Request, call_next):
     """Log an ISO-8601 UTC timestamp to the app logger after each incoming request."""
     response = await call_next(request)
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
-    logger.info(f"Request timestamp: {ts}")
+    if request.url.path == "/moderate":
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+        logger.info(ts)
+
     return response
 
 
